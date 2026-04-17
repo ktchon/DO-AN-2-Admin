@@ -533,11 +533,13 @@ class _BrandsScreenState extends State<BrandsScreen> {
                                                         icon: const Icon(Icons.edit,
                                                             color: Colors.blue),
                                                         onPressed: () => _showEditDialog(brand),
+                                                        tooltip: "Tuỳ chọn",
                                                       ),
                                                       IconButton(
                                                         icon: const Icon(Icons.delete,
                                                             color: Colors.red),
                                                         onPressed: () => _confirmDelete(brand.id),
+                                                        tooltip: "Xóa",
                                                       ),
                                                     ],
                                                   )),

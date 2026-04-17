@@ -497,12 +497,14 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                                         icon: const Icon(Icons.edit,
                                                             color: Colors.blue),
                                                         onPressed: () => _showEditDialog(cat),
+                                                        tooltip: "Tuỳ chọn",
                                                       ),
                                                       IconButton(
                                                         icon: const Icon(Icons.delete,
                                                             color: Colors.red),
                                                         onPressed: () =>
                                                             _confirmDeleteCategory(cat.id),
+                                                            tooltip: "Xóa",
                                                       ),
                                                     ],
                                                   )),

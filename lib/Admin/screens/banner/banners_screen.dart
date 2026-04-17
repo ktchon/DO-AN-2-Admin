@@ -465,11 +465,13 @@ class _BannersScreenState extends State<BannersScreen> {
                                                         icon: const Icon(Icons.edit,
                                                             color: Colors.blue),
                                                         onPressed: () => _showEditDialog(banner),
+                                                        tooltip: "Tuỳ chọn",
                                                       ),
                                                       IconButton(
                                                         icon: const Icon(Icons.delete,
                                                             color: Colors.red),
                                                         onPressed: () => _confirmDelete(banner.id),
+                                                        tooltip: "Xóa",
                                                       ),
                                                     ],
                                                   ),

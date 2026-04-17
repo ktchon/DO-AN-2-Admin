@@ -48,7 +48,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             Expanded(
                               flex: 4,
                               child: Card(
-                                color: Color(0xFFF2F2F7),
+                                color: Colors.white,
                                 elevation: 2,
                                 shape:
                                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -104,7 +104,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             Expanded(
                               flex: 6,
                               child: Card(
-                                color: Color(0xFFF2F2F7),
+                                color: Colors.white,
                                 elevation: 2,
                                 shape:
                                     RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

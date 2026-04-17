@@ -1,9 +1,12 @@
-// lib/Admin/screens/dashboard/admin_dashboard_screen.dart
-import 'package:flutter/material.dart';
+import 'dart:ui';
+
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+
 import 'package:kc_admin_panel/Admin/screens/admin_sidebar.dart';
 import 'package:kc_admin_panel/Admin/screens/dashboard/widgets/metric_card.dart';
 import 'package:kc_admin_panel/Admin/screens/sidebar/admin_header.dart';
+
 import '../../controllers/dashboard/dashboard_controller.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
@@ -16,236 +19,46 @@ class AdminDashboardScreen extends StatefulWidget {
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   late final DashboardController _controller;
 
+  // ── initState & dispose ─────────────────────────────────────────────────────
   @override
   void initState() {
     super.initState();
     _controller = DashboardController();
+    _controller.addListener(() => setState(() {})); // rebuild khi data thay đổi
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA),
-      body: Row(
-        children: [
-          // ==================== SIDEBAR ====================
-          const AdminSidebar(currentRoute: '/admin/dashboard'),
-
-          // ==================== MAIN CONTENT ====================
-          Expanded(
-            child: Column(
-              children: [
-                // Header
-                AdminHeader(),
-                SizedBox(
-                  height: 20,
-                ),
-
-                // Dashboard Body
-                Expanded(
-                  child: SingleChildScrollView(
-                    padding: const EdgeInsets.all(30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('Dashboard',
-                            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
-
-                        const SizedBox(height: 24),
-
-                        // 4 Metric Cards
-                        GridView.count(
-                          crossAxisCount: 4,
-                          shrinkWrap: true,
-                          crossAxisSpacing: 20,
-                          mainAxisSpacing: 20,
-                          childAspectRatio: 2.2,
-                          children: const [
-                            MetricCard(
-                              icon: Icons.attach_money,
-                              title: 'Sales total',
-                              value: '\$30,117.28',
-                              change: '↑ 25%',
-                              isIncrease: true,
-                            ),
-                            MetricCard(
-                              icon: Icons.shopping_bag_outlined,
-                              title: 'Average Order Value',
-                              value: '\$654.72',
-                              change: '↓ 15%',
-                              isIncrease: false,
-                            ),
-                            MetricCard(
-                              icon: Icons.receipt_long_outlined,
-                              title: 'Total Orders',
-                              value: '46',
-                              change: '↑ 44%',
-                              isIncrease: true,
-                            ),
-                            MetricCard(
-                              icon: Icons.people_outline,
-                              title: 'Visitors',
-                              value: '39',
-                              change: '↑ 2%',
-                              isIncrease: true,
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 30),
-
-                        // Charts Row
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Weekly Sales
-                            Expanded(
-                              flex: 2,
-                              child: _buildWeeklySalesChart(),
-                            ),
-                            const SizedBox(width: 24),
-                            // Orders Status
-                            Expanded(
-                              child: _buildOrdersStatusChart(),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 30),
-
-                        // Recent Orders Table
-                        _buildRecentOrdersTable(),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
-  Widget _buildMenuItem(IconData icon, String title,
-      {bool isSelected = false, VoidCallback? onTap}) {
-    return ListTile(
-      leading: Icon(icon, color: isSelected ? Colors.white : Colors.grey[700]),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: isSelected ? Colors.white : Colors.black87,
-          fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-        ),
-      ),
-      tileColor: isSelected ? const Color(0xFF1E88E5) : null,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      onTap: onTap,
-      selected: isSelected,
-      selectedTileColor: const Color(0xFF1E88E5),
-    );
+  // ── Helper methods ─────────────────────────────────────────────────────────
+  String _formatCurrency(double value) {
+    if (value >= 1000000) {
+      return '${(value / 1000000).toStringAsFixed(1)}M ₫';
+    }
+    if (value >= 1000) {
+      return '${(value / 1000).toStringAsFixed(0)}K ₫';
+    }
+    return '${value.toStringAsFixed(0)} ₫';
   }
 
-  Widget _buildWeeklySalesChart() {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Weekly Sales', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-          const SizedBox(height: 20),
-          SizedBox(
-            height: 320,
-            child: BarChart(
-              BarChartData(
-                alignment: BarChartAlignment.spaceAround,
-                barGroups: List.generate(5, (i) {
-                  final values = [180, 2100, 3900, 800, 0]; // demo
-                  return BarChartGroupData(
-                    x: i,
-                    barRods: [
-                      BarChartRodData(
-                          toY: values[i].toDouble(),
-                          color: const Color(0xFF1E88E5),
-                          width: 35,
-                          borderRadius: BorderRadius.circular(6))
-                    ],
-                  );
-                }),
-                titlesData: FlTitlesData(
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      getTitlesWidget: (value, meta) => Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Text(['Mon', 'Tue', 'Wed', 'Thu', 'Fri'][value.toInt()]),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  String _formatDate(DateTime dt) =>
+      '${dt.day.toString().padLeft(2, '0')}/${dt.month.toString().padLeft(2, '0')}/${dt.year}';
+
+  Map<String, dynamic> _getStatusStyle(String status) {
+    const map = {
+      'pending': {'color': Color(0xFFBBDEFB)},
+      'processing': {'color': Color(0xFFFFE0B2)},
+      'shipped': {'color': Color(0xFFE1BEE7)},
+      'delivered': {'color': Color(0xFFC8E6C9)},
+      'cancelled': {'color': Color(0xFFFFCDD2)},
+    };
+    return map[status.toLowerCase()] ?? {'color': Color(0xFFEEEEEE)};
   }
 
-  Widget _buildOrdersStatusChart() {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text('Orders Status', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-          const SizedBox(height: 20),
-
-          // Pie Chart
-          SizedBox(
-            height: 180,
-            child: PieChart(
-              PieChartData(
-                centerSpaceRadius: 40,
-                sections: [
-                  PieChartSectionData(value: 26, color: Colors.blue, title: '26', radius: 65),
-                  PieChartSectionData(value: 10, color: Colors.green, title: '10', radius: 65),
-                  PieChartSectionData(value: 5, color: Colors.purple, title: '5', radius: 65),
-                  PieChartSectionData(value: 5, color: Colors.orange, title: '5', radius: 65),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 24),
-
-          // Bảng Orders Status (giống ảnh bạn gửi)
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Status', style: TextStyle(fontWeight: FontWeight.w500)),
-              Text('Orders', style: TextStyle(fontWeight: FontWeight.w500)),
-              Text('Total', style: TextStyle(fontWeight: FontWeight.w500)),
-            ],
-          ),
-          const Divider(height: 20),
-
-          _buildStatusRow(Colors.purple, 'Shipped', '5', '\$5823.36'),
-          _buildStatusRow(Colors.green, 'Delivered', '10', '\$3049.40'),
-          _buildStatusRow(Colors.blue, 'Pending', '26', '\$6864.40'),
-          _buildStatusRow(Colors.orange, 'Processing', '5', '\$14380.12'),
-        ],
-      ),
-    );
-  }
-
+  // ── Build Status Row ───────────────────────────────────────────────────────
   Widget _buildStatusRow(Color color, String status, String orders, String total) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -273,6 +86,132 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 
+  // ── Weekly Sales Chart ─────────────────────────────────────────────────────
+  Widget _buildWeeklySalesChart() {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Doanh thu theo tuần',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 20),
+          SizedBox(
+            height: 320,
+            child: BarChart(
+              BarChartData(
+                alignment: BarChartAlignment.spaceAround,
+                barGroups: List.generate(7, (i) {
+                  final values = _controller.weeklySalesData;
+                  return BarChartGroupData(
+                    x: i,
+                    barRods: [
+                      BarChartRodData(
+                        toY: values[i],
+                        color: const Color(0xFF1E88E5),
+                        width: 28,
+                        borderRadius: BorderRadius.circular(6),
+                      )
+                    ],
+                  );
+                }),
+                titlesData: FlTitlesData(
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) => Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Text(
+                          _controller.weekDayLabels[value.toInt()],
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Orders Status Chart ────────────────────────────────────────────────────
+  Widget _buildOrdersStatusChart() {
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Trạng thái đơn hàng',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          ),
+          const SizedBox(height: 20),
+
+          // Pie Chart
+          SizedBox(
+            height: 180,
+            child: PieChart(
+              PieChartData(
+                centerSpaceRadius: 40,
+                sections: _controller.orderStatusList
+                    .where((s) => (s['count'] as int) > 0)
+                    .map((s) => PieChartSectionData(
+                          value: (s['count'] as int).toDouble(),
+                          color: s['color'] as Color,
+                          title: '${s['count']}',
+                          radius: 65,
+                          titleStyle: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ))
+                    .toList(),
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // Header bảng
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text('Trạng thái', style: TextStyle(fontWeight: FontWeight.w500)),
+              Text('Số đơn', style: TextStyle(fontWeight: FontWeight.w500)),
+              Text('Tổng tiền', style: TextStyle(fontWeight: FontWeight.w500)),
+            ],
+          ),
+          const Divider(height: 20),
+
+          // Dynamic status rows
+          ..._controller.orderStatusList
+              .where((s) => (s['count'] as int) > 0)
+              .map((s) => _buildStatusRow(
+                    s['color'] as Color,
+                    s['label'] as String,
+                    '${s['count']}',
+                    _formatCurrency(s['total'] as double),
+                  )),
+        ],
+      ),
+    );
+  }
+
+  // ── Recent Orders Table ────────────────────────────────────────────────────
   Widget _buildRecentOrdersTable() {
     return Container(
       padding: const EdgeInsets.all(24),
@@ -283,7 +222,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Recent Orders', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+          const Text(
+            'Đơn hàng gần đây',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          ),
           const SizedBox(height: 16),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -291,35 +233,141 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               columnSpacing: 50,
               headingTextStyle: const TextStyle(fontWeight: FontWeight.w600),
               columns: const [
-                DataColumn(label: Text('Order ID')),
-                DataColumn(label: Text('Date')),
-                DataColumn(label: Text('Items')),
-                DataColumn(label: Text('Status')),
-                DataColumn(label: Text('Amount')),
+                DataColumn(label: Text('Mã đơn')),
+                DataColumn(label: Text('Ngày')),
+                DataColumn(label: Text('Số sản phẩm')),
+                DataColumn(label: Text('Trạng thái')),
+                DataColumn(label: Text('Tổng tiền')),
               ],
-              rows: _controller.recentOrders.map((order) {
+              rows: _controller.recentOrdersList.map((order) {
+                final statusStyle = _getStatusStyle(order.status);
                 return DataRow(
                   cells: [
-                    DataCell(Text(order['id'] ?? '')),
-                    const DataCell(Text('26 Jul 2024')),
-                    const DataCell(Text('2 Items')),
+                    DataCell(Text(order.id)),
+                    DataCell(Text(_formatDate(order.createdAt))),
+                    DataCell(Text('${order.itemCount} sản phẩm')),
                     DataCell(
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                         decoration: BoxDecoration(
-                          color: order['statusColor'],
+                          color: statusStyle['color'],
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
-                          order['status'] ?? '',
+                          order.status,
                           style: const TextStyle(fontSize: 13),
                         ),
                       ),
                     ),
-                    DataCell(Text(order['amount'] ?? '')),
+                    DataCell(Text(_formatCurrency(order.totalAmount))),
                   ],
                 );
               }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // ── Main Build ─────────────────────────────────────────────────────────────
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFFF8F9FA),
+      body: Row(
+        children: [
+          // SIDEBAR
+          const AdminSidebar(currentRoute: '/admin/dashboard'),
+
+          // MAIN CONTENT
+          Expanded(
+            child: Column(
+              children: [
+                const AdminHeader(),
+                const SizedBox(height: 20),
+
+                // Dashboard Body
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(30),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Bảng điều khiển',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+
+                        // 4 Metric Cards
+                        GridView.count(
+                          crossAxisCount: 4,
+                          shrinkWrap: true,
+                          crossAxisSpacing: 20,
+                          mainAxisSpacing: 20,
+                          childAspectRatio: 2.2,
+                          children: [
+                            MetricCard(
+                              icon: Icons.attach_money,
+                              title: 'Tổng doanh thu',
+                              value: _formatCurrency(_controller.salesTotal),
+                              change: '',
+                              isIncrease: true,
+                            ),
+                            MetricCard(
+                              icon: Icons.shopping_bag_outlined,
+                              title: 'Giá trị đơn trung bình',
+                              value: _formatCurrency(_controller.avgOrderValue),
+                              change: '',
+                              isIncrease: true,
+                            ),
+                            MetricCard(
+                              icon: Icons.receipt_long_outlined,
+                              title: 'Tổng số đơn hàng',
+                              value: '${_controller.totalOrders}',
+                              change: '',
+                              isIncrease: true,
+                            ),
+                            MetricCard(
+                              icon: Icons.people_outline,
+                              title: 'Tổng số khách hàng',
+                              value: '${_controller.totalUsers}',
+                              change: '',
+                              isIncrease: true,
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        // Charts Row
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              flex: 2,
+                              child: _buildWeeklySalesChart(),
+                            ),
+                            const SizedBox(width: 24),
+                            Expanded(
+                              child: _buildOrdersStatusChart(),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 30),
+
+                        // Recent Orders
+                        _buildRecentOrdersTable(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],

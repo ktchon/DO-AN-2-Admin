@@ -38,7 +38,9 @@ class _MediaScreenState extends State<MediaScreen> {
                       SizedBox(
                         height: 20,
                       ),
-                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 20,
+                      ),
                       // BREADCRUMB
                       Padding(
                         padding: EdgeInsets.only(left: 30),
@@ -51,7 +53,7 @@ class _MediaScreenState extends State<MediaScreen> {
                       ),
 
                       const SizedBox(height: 8),
-      
+
                       // HEADER
                       Padding(
                         padding: EdgeInsets.only(left: 30, right: 30),
@@ -63,9 +65,33 @@ class _MediaScreenState extends State<MediaScreen> {
                               style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                             ),
                             ElevatedButton.icon(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.resolveWith((states) {
+                                  if (states.contains(MaterialState.hovered)) {
+                                    return const Color(0xFF1976D2); 
+                                  }
+                                  return const Color(0xFF1E88E5); 
+                                }),
+                                foregroundColor: MaterialStateProperty.all(Colors.white),
+                                padding: MaterialStateProperty.all(
+                                  const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                                ),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                ),
+                                elevation: MaterialStateProperty.resolveWith((states) {
+                                  return states.contains(MaterialState.hovered) ? 4 : 2;
+                                }),
+                              ),
                               onPressed: controller.toggleUploadMode,
-                              icon: const Icon(Icons.cloud_upload_outlined),
-                              label: const Text("Upload Images"),
+                              icon: const Icon(Icons.cloud_upload_outlined, size: 22),
+                              label: const Text(
+                                "Tải lên hình ảnh",
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -73,14 +99,14 @@ class _MediaScreenState extends State<MediaScreen> {
 
                       const SizedBox(height: 20),
 
-                      // 🔹 FOLDER SELECT
+                      // FOLDER SELECT
                       Padding(
                         padding: EdgeInsets.only(left: 30),
                         child: Row(
                           children: [
                             const Text("Media Folders"),
                             const SizedBox(width: 12),
-                        
+
                             DropdownButton<String>(
                               hint: const Text("Select Folder"),
                               value: controller.selectedFolder,
@@ -94,10 +120,10 @@ class _MediaScreenState extends State<MediaScreen> {
                                 if (value != null) controller.changeFolder(value);
                               },
                             ),
-                        
+
                             const SizedBox(width: 16),
-                        
-                            // 🔥 BADGE
+
+                            // BADGE
                             if (controller.selectedFolder != null)
                               Container(
                                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

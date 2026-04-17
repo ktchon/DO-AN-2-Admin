@@ -221,12 +221,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
                                                             color: Colors.blue),
                                                         onPressed: () =>
                                                             _navigateToEditProduct(product),
+                                                            tooltip: "Tuỳ chọn",
                                                       ),
                                                       IconButton(
                                                         icon: const Icon(Icons.delete,
                                                             color: Colors.red),
                                                         onPressed: () =>
                                                             _confirmDelete(context, product.id),
+                                                            tooltip: "Xóa",
                                                       ),
                                                     ],
                                                   ),

@@ -348,6 +348,7 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
 
   Widget _buildCard(String title, List<Widget> children) {
     return Card(
+      color: Colors.white,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(20),
