@@ -375,19 +375,6 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
                         const SizedBox(height: 20),
 
-                        /// SEARCH
-                        TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Tìm kiếm danh mục',
-                            prefixIcon: const Icon(Icons.search),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
-                        ),
-
-                        const SizedBox(height: 20),
-
                         /// TABLE
                         Expanded(
                           child: StreamBuilder<List<CategoryModel>>(

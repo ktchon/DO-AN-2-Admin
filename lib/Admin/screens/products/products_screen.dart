@@ -36,7 +36,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Products",
+                      const Text("Sản phẩm",
                           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
                       Row(
                         children: [

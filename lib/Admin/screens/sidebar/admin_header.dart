@@ -39,12 +39,16 @@ class AdminHeader extends StatelessWidget {
           const CircleAvatar(
             radius: 18,
             backgroundColor: Color(0xFF1E88E5),
-            child: Text('A', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            child: Text('C', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           ),
           const SizedBox(width: 10),
-          const Text(
-            'App Admin',
-            style: TextStyle(fontWeight: FontWeight.w600),
+          const Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('App Admin', style: TextStyle(fontWeight: FontWeight.w600)),
+              Text('support@shopapp.com', style: TextStyle(fontSize: 12, color: Colors.grey)),
+            ],
           ),
         ],
       ),

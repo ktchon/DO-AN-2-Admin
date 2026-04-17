@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +13,8 @@ class OrderModel {
   final String? ghnStatus;
   final String? cancelReason;
   final List<OrderItem> items;
-  final Map<String, dynamic>? address; // Address map từ order
+  final Map<String, dynamic>? address;
+  final List<dynamic>? timeline; // ← Thêm mới
 
   OrderModel({
     required this.id,
@@ -30,6 +29,7 @@ class OrderModel {
     this.cancelReason,
     required this.items,
     this.address,
+    this.timeline,
   });
 
   factory OrderModel.fromMap(Map<String, dynamic> map, String id) {
@@ -50,6 +50,7 @@ class OrderModel {
       cancelReason: map['cancelReason'],
       items: itemsList,
       address: map['address'] as Map<String, dynamic>?,
+      timeline: map['timeline'] as List<dynamic>?, // ← Thêm mới
     );
   }
 
@@ -61,15 +62,28 @@ class OrderModel {
         return 'Đã hủy';
       case 'processing':
         return 'Đang xử lý';
+      case 'shipped':
+        return 'Đã giao vận';
+      case 'pending':
+        return 'Chờ xử lý';
       default:
         return status.toUpperCase();
     }
   }
 
   Color get statusColor {
-    if (status.toLowerCase() == 'delivered') return Colors.green;
-    if (status.toLowerCase() == 'cancelled') return Colors.red;
-    return Colors.orange;
+    switch (status.toLowerCase()) {
+      case 'delivered':
+        return Colors.green;
+      case 'cancelled':
+        return Colors.red;
+      case 'shipped':
+        return const Color(0xFF7C3AED);
+      case 'processing':
+        return Colors.orange;
+      default:
+        return Colors.blue;
+    }
   }
 }
 

@@ -9,5 +9,7 @@ class AppRoutes {
   static const String brand = '/admin/brands';
   static const String coupon = '/admin/coupons';
   static const String customer = '/admin/customers';
+  static const String order = '/admin/orders';
+  static const String setting = '/admin/settings';
   
 }

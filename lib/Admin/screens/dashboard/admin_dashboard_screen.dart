@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:kc_admin_panel/Admin/screens/admin_sidebar.dart';
 import 'package:kc_admin_panel/Admin/screens/dashboard/widgets/metric_card.dart';
+import 'package:kc_admin_panel/Admin/screens/sidebar/admin_header.dart';
 import '../../controllers/dashboard/dashboard_controller.dart';
 
 class AdminDashboardScreen extends StatefulWidget {
@@ -35,7 +36,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
             child: Column(
               children: [
                 // Header
-                _buildHeader(),
+                AdminHeader(),
+                SizedBox(
+                  height: 20,
+                ),
 
                 // Dashboard Body
                 Expanded(
@@ -117,50 +121,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      height: 76,
-      padding: const EdgeInsets.symmetric(horizontal: 30),
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(bottom: BorderSide(color: Colors.black12)),
-      ),
-      child: Row(
-        children: [
-          const Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search anything...',
-                prefixIcon: Icon(Icons.search),
-                border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
-                filled: true,
-                fillColor: Color(0xFFF8F9FA),
-                contentPadding: EdgeInsets.symmetric(vertical: 0),
-              ),
-            ),
-          ),
-          const SizedBox(width: 20),
-          const Icon(Icons.notifications_none, size: 28),
-          const SizedBox(width: 30),
-          const CircleAvatar(
-            radius: 18,
-            backgroundColor: Color(0xFF1E88E5),
-            child: Text('A', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          ),
-          const SizedBox(width: 10),
-          const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('App Admin', style: TextStyle(fontWeight: FontWeight.w600)),
-              Text('support@codingwitht.com', style: TextStyle(fontSize: 12, color: Colors.grey)),
-            ],
           ),
         ],
       ),

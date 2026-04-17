@@ -4,39 +4,34 @@ import 'package:kc_admin_panel/Admin/models/order/order_model.dart';
 class OrderRepository {
   final _db = FirebaseFirestore.instance;
 
-  // Lấy tất cả Orders của một User (dùng cho Customer Detail)
+  /// Lấy đơn hàng theo userId
   Stream<List<OrderModel>> getOrdersByUser(String userId) {
-    return _db
-        .collection('Users')
-        .doc(userId)
-        .collection('Orders')
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.docs
-          .map((doc) => OrderModel.fromMap(doc.data(), doc.id))
-          .toList();
-    });
+    return _db.collection('Users').doc(userId).collection('Orders').snapshots().map(
+        (snapshot) => snapshot.docs.map((doc) => OrderModel.fromMap(doc.data(), doc.id)).toList());
   }
 
-  // Lấy tất cả Orders trong hệ thống (dùng cho trang Orders sau này)
+  /// Lấy tất cả đơn hàng trong hệ thống
   Stream<List<OrderModel>> getAllOrders() {
-    // Nếu bạn có collection Orders riêng ở root, dùng cái này
-    // Hiện tại theo cấu trúc của bạn là subcollection trong User
-    // Nếu sau này tách riêng, ta sẽ điều chỉnh
-    return _db.collectionGroup('Orders').snapshots().map((snapshot) {
-      return snapshot.docs
-          .map((doc) => OrderModel.fromMap(doc.data(), doc.id))
-          .toList();
+    return _db.collectionGroup('Orders').snapshots().map(
+        (snapshot) => snapshot.docs.map((doc) => OrderModel.fromMap(doc.data(), doc.id)).toList());
+  }
+
+  /// Cập nhật trạng thái đơn hàng
+  Future<void> updateOrderStatus(String userId, String orderId, String newStatus) async {
+    await _db.collection('Users').doc(userId).collection('Orders').doc(orderId).update({
+      'status': newStatus,
+      'updatedAt': FieldValue.serverTimestamp(),
     });
   }
 
-  // Cập nhật trạng thái đơn hàng (tương lai)
-  Future<void> updateOrderStatus(String userId, String orderId, String newStatus) async {
-    await _db
-        .collection('Users')
-        .doc(userId)
-        .collection('Orders')
-        .doc(orderId)
-        .update({'status': newStatus, 'updatedAt': FieldValue.serverTimestamp()});
+  /// Xoá đơn hàng
+  Future<void> deleteOrder(String userId, String orderId) async {
+    await _db.collection('Users').doc(userId).collection('Orders').doc(orderId).delete();
+  }
+
+  /// Lấy thông tin user (name, email, phone, avatar)
+  Future<Map<String, dynamic>?> getUserInfo(String userId) async {
+    final doc = await _db.collection('Users').doc(userId).get();
+    return doc.data();
   }
 }

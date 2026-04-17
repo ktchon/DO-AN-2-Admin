@@ -391,18 +391,7 @@ class _BrandsScreenState extends State<BrandsScreen> {
 
                         const SizedBox(height: 20),
 
-                        /// SEARCH
-                        TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Tìm kiếm thương hiệu...',
-                            prefixIcon: const Icon(Icons.search),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
-                        ),
-
-                        const SizedBox(height: 20),
+                       
 
                         /// TABLE
                         Expanded(

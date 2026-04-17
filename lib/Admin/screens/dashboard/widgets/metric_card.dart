@@ -23,22 +23,54 @@ class MetricCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10)],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min, // ← Fix chính
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Icon(icon, size: 28, color: const Color(0xFF1E88E5)),
           const SizedBox(height: 12),
-          Text(title, style: const TextStyle(fontSize: 14, color: Colors.grey)),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 14, color: Colors.grey),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           const SizedBox(height: 8),
-          Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          Text(
+            value,
+            style:
+                const TextStyle(fontSize: 22, fontWeight: FontWeight.bold), // Giảm từ 24 xuống 22
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
           const SizedBox(height: 8),
           Row(
             children: [
-              Icon(isIncrease ? Icons.arrow_upward : Icons.arrow_downward,
-                  color: isIncrease ? Colors.green : Colors.red, size: 16),
-              Text(change, style: TextStyle(color: isIncrease ? Colors.green : Colors.red)),
+              Icon(
+                isIncrease ? Icons.arrow_upward : Icons.arrow_downward,
+                color: isIncrease ? Colors.green : Colors.red,
+                size: 16,
+              ),
+              const SizedBox(width: 4),
+              Expanded(
+                child: Text(
+                  change,
+                  style: TextStyle(
+                    color: isIncrease ? Colors.green : Colors.red,
+                    fontSize: 13,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
             ],
           ),
         ],

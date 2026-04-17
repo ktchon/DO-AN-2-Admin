@@ -334,18 +334,6 @@ class _BannersScreenState extends State<BannersScreen> {
                         ),
                         const SizedBox(height: 20),
 
-                        // Search (có thể thêm filter sau)
-                        TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Tìm kiếm banner...',
-                            prefixIcon: const Icon(Icons.search),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-
                         // Table
                         Expanded(
                           child: StreamBuilder<List<BannerModel>>(

@@ -92,20 +92,6 @@ class _CustomersScreenState extends State<CustomersScreen> {
                             style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 20),
 
-                        // Search
-                        TextField(
-                          decoration: InputDecoration(
-                            hintText: 'Tìm kiếm khách hàng...',
-                            prefixIcon: const Icon(Icons.search),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
-                          onChanged: (value) => setState(() => searchQuery = value.toLowerCase()),
-                        ),
-                        const SizedBox(height: 20),
-
-                        // === BẢNG FULL LỚN - CUSTOMERS
                         Expanded(
                           child: Container(
                             width: double.infinity,

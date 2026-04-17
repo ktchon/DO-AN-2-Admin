@@ -7,7 +7,9 @@ import 'package:kc_admin_panel/Admin/screens/dashboard/admin_dashboard_screen.da
     show AdminDashboardScreen;
 import 'package:kc_admin_panel/Admin/screens/login/login_screen.dart';
 import 'package:kc_admin_panel/Admin/screens/media/media_screen.dart';
+import 'package:kc_admin_panel/Admin/screens/order/order_screen.dart';
 import 'package:kc_admin_panel/Admin/screens/products/products_screen.dart';
+import 'package:kc_admin_panel/Admin/screens/setting/settings_screen.dart';
 import 'package:kc_admin_panel/Admin/screens/user/customer_screen.dart';
 import 'package:kc_admin_panel/routes/routes.dart';
 
@@ -30,6 +32,8 @@ class MyAdminApp extends StatelessWidget {
         AppRoutes.brand: (context) => const BrandsScreen(),
         AppRoutes.coupon: (context) => const CouponsScreen(),
         AppRoutes.customer: (context) => const CustomersScreen(),
+        AppRoutes.order: (context) => const OrdersScreen(),
+        AppRoutes.setting: (context) => const SettingsScreen(),
       },
     );
   }
