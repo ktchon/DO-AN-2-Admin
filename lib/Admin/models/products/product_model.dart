@@ -45,15 +45,7 @@ class ProductModel {
   });
 
   factory ProductModel.fromMap(Map<String, dynamic> map, String id) {
-    // Xử lý Brand (có thể là String hoặc Map)
-    BrandModel? brandModel;
-    if (map['brand'] != null) {
-      if (map['brand'] is Map) {
-        brandModel = BrandModel.fromMap(map['brand'] as Map<String, dynamic>);
-      } else if (map['brand'] is String) {
-        brandModel = BrandModel.fromName(map['brand'] as String);
-      }
-    }
+    final brandMap = map['Brand'] as Map<String, dynamic>?;
 
     return ProductModel(
       id: id,
@@ -68,7 +60,7 @@ class ProductModel {
       description: map['description']?.toString() ?? map['Description']?.toString() ?? '',
       productType:
           map['productType']?.toString() ?? map['ProductType']?.toString() ?? 'ProductType.single',
-      brand: brandModel,
+      brand: brandMap != null ? BrandModel.fromMap(brandMap, brandMap['Id'] ?? '') : null,
       images: List<String>.from(map['images'] ?? map['Images'] ?? []),
       complementaryProductIds: List<String>.from(map['complementaryProductIds'] ?? []),
       searchName: map['searchName']?.toString() ?? map['SearchName']?.toString() ?? '',

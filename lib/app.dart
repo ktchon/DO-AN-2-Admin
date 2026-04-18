@@ -10,6 +10,7 @@ import 'package:kc_admin_panel/Admin/screens/media/media_screen.dart';
 import 'package:kc_admin_panel/Admin/screens/order/order_screen.dart';
 import 'package:kc_admin_panel/Admin/screens/products/products_screen.dart';
 import 'package:kc_admin_panel/Admin/screens/profile/profile_screen.dart';
+import 'package:kc_admin_panel/Admin/screens/report/reports_screen.dart';
 import 'package:kc_admin_panel/Admin/screens/setting/settings_screen.dart';
 import 'package:kc_admin_panel/Admin/screens/user/customer_screen.dart';
 import 'package:kc_admin_panel/routes/routes.dart';
@@ -28,13 +29,13 @@ class MyAdminApp extends StatelessWidget {
         AppRoutes.adminDashboard: (context) => const AdminDashboardScreen(),
         AppRoutes.order: (context) => const OrdersScreen(),
         AppRoutes.customer: (context) => const CustomersScreen(),
+        AppRoutes.report: (context) => const ReportsScreen(),
         AppRoutes.product: (context) => const ProductsScreen(),
         AppRoutes.categories: (context) => const CategoriesScreen(),
         AppRoutes.brand: (context) => const BrandsScreen(),
         AppRoutes.banner: (context) => const BannersScreen(),
         AppRoutes.coupon: (context) => const CouponsScreen(),
         AppRoutes.media: (context) => const MediaScreen(),
-        
         AppRoutes.profile: (context) => const ProfileScreen(),
         AppRoutes.setting: (context) => const SettingsScreen(),
       },

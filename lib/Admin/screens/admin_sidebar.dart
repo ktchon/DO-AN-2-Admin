@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:kc_admin_panel/Admin/models/setting/setting_model.dart';
 import 'package:kc_admin_panel/Admin/screens/sidebar/admin_sidebar_menu.dart';
 import 'package:kc_admin_panel/data/setting/app_settings_service.dart';
@@ -60,6 +61,7 @@ class AdminSidebar extends StatelessWidget {
                         Text(
                           settings.appName,
                           style: const TextStyle(
+                            color: Colors.green,
                             fontSize: 24,
                             fontWeight: FontWeight.w700,
                           ),
@@ -89,7 +91,7 @@ class AdminSidebar extends StatelessWidget {
                     onTap: () => Navigator.pushReplacementNamed(context, '/admin/dashboard'),
                   ),
                   AdminSidebarMenu(
-                    icon: Icons.shopping_cart_outlined,
+                    icon: Iconsax.receipt_text,
                     title: 'Đơn hàng',
                     isSelected: currentRoute == '/admin/orders',
                     onTap: () => Navigator.pushReplacementNamed(context, '/admin/orders'),
@@ -99,6 +101,12 @@ class AdminSidebar extends StatelessWidget {
                     title: 'Khách hàng',
                     isSelected: currentRoute == '/admin/customers',
                     onTap: () => Navigator.pushReplacementNamed(context, '/admin/customers'),
+                  ),
+                  AdminSidebarMenu(
+                    icon: Iconsax.message,
+                    title: 'Đánh giá',
+                    isSelected: currentRoute == '/admin/reports',
+                    onTap: () => Navigator.pushReplacementNamed(context, '/admin/reports'),
                   ),
                   AdminSidebarMenu(
                     icon: Icons.inventory_2_outlined,
@@ -138,7 +146,7 @@ class AdminSidebar extends StatelessWidget {
                   ),
             
                   const Divider(
-                    height: 150,
+                    height: 100,
                     color: Colors.green,
                     thickness: 2,
                   ),

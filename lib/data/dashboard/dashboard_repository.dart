@@ -53,4 +53,33 @@ class DashboardRepository {
             .map((doc) => OrderModel.fromDocument(doc))
             .toList());
   }
+  // ─── MONTHLY ORDERS (6 tháng gần nhất) ───────────────────────────────────
+  Stream<List<OrderModel>> watchMonthlyOrders() {
+    final fromDate = DateTime.now().subtract(const Duration(days: 180)); // ~6 tháng
+    final fromTimestamp = Timestamp.fromDate(fromDate);
+
+    return _db
+        .collectionGroup('Orders')
+        .where('orderDate', isGreaterThanOrEqualTo: fromTimestamp)
+        .orderBy('orderDate', descending: true)
+        .snapshots()
+        .map((snap) => snap.docs
+            .map((doc) => OrderModel.fromDocument(doc))
+            .toList());
+  }
+
+  // ─── YEARLY ORDERS (12 tháng gần nhất ~ 1 năm) ───────────────────────────
+  Stream<List<OrderModel>> watchYearlyOrders() {
+    final fromDate = DateTime.now().subtract(const Duration(days: 365));
+    final fromTimestamp = Timestamp.fromDate(fromDate);
+
+    return _db
+        .collectionGroup('Orders')
+        .where('orderDate', isGreaterThanOrEqualTo: fromTimestamp)
+        .orderBy('orderDate', descending: true)
+        .snapshots()
+        .map((snap) => snap.docs
+            .map((doc) => OrderModel.fromDocument(doc))
+            .toList());
+  }
 }

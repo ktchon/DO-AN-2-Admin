@@ -9,19 +9,19 @@ class BrandModel {
     this.image,
   });
 
-  factory BrandModel.fromMap(Map<String, dynamic> map) {
+  factory BrandModel.fromMap(Map<String, dynamic> map, String id) {
     return BrandModel(
-      id: map['id'] ?? '',
-      name: map['name'] ?? '',
-      image: map['image'],
+      id: id,
+      name: map['Name'] ?? map['name'] ?? '',
+      image: map['Image'] ?? map['image'] ?? '',
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'name': name,
-      'image': image,
+      'Name': name,
+      'Image': image,
     };
   }
 

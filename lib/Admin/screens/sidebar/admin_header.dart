@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kc_admin_panel/Admin/models/notification/notification_model.dart';
 import 'package:kc_admin_panel/Admin/models/profile/profile_model.dart';
 import 'package:kc_admin_panel/data/profile/profile_service.dart';
 
@@ -35,8 +36,68 @@ class AdminHeader extends StatelessWidget {
               ),
               const SizedBox(width: 30),
 
-              // Notification
-              const Icon(Icons.notifications_none, size: 28),
+              // Notification với Dropdown
+
+              ValueListenableBuilder<List<NotificationModel>>(
+                valueListenable:
+                    notificationController.recentNotificationsNotifier, // hoặc dùng StreamBuilder
+                builder: (context, notifications, child) {
+                  final unreadCount = notifications.where((n) => !n.isRead).length;
+
+                  return PopupMenuButton(
+                    icon: Stack(
+                      children: [
+                        const Icon(Icons.notifications_none, size: 28),
+                        if (unreadCount > 0)
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                unreadCount.toString(),
+                                style: const TextStyle(color: Colors.white, fontSize: 10),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    itemBuilder: (context) => notifications.take(10).map((noti) {
+                      return PopupMenuItem(
+                        child: ListTile(
+                          leading: Icon(
+                            noti.type == 'order'
+                                ? Icons.shopping_cart
+                                : noti.type == 'report'
+                                    ? Icons.report
+                                    : Icons.person,
+                            color: Colors.blue,
+                          ),
+                          title: Text(noti.title),
+                          subtitle: Text(noti.timeAgo),
+                          trailing: noti.isRead
+                              ? null
+                              : const Icon(Icons.circle, size: 10, color: Colors.red),
+                          onTap: () {
+                            // Xử lý click vào thông báo
+                            controller.markAsRead(noti.id);
+                            _handleNotificationTap(noti);
+                          },
+                        ),
+                      );
+                    }).toList()
+                      ..add(
+                        const PopupMenuItem(
+                          child: Text("Xem tất cả thông báo", style: TextStyle(color: Colors.blue)),
+                        ),
+                      ),
+                  );
+                },
+              ),
 
               const SizedBox(width: 30),
 

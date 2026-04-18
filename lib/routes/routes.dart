@@ -4,6 +4,7 @@ class AppRoutes {
   static const String adminDashboard = '/admin/dashboard';
   static const String order = '/admin/orders';
   static const String customer = '/admin/customers';
+  static const String report = '/admin/reports';
   static const String product = '/admin/products';
   static const String categories = '/admin/categories';
   static const String brand = '/admin/brands';

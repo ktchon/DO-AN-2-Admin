@@ -18,19 +18,31 @@ class AdminDashboardScreen extends StatefulWidget {
 
 class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   late final DashboardController _controller;
-
+  String _chartPeriod = 'week';
   // ── initState & dispose ─────────────────────────────────────────────────────
   @override
   void initState() {
     super.initState();
     _controller = DashboardController();
-    _controller.addListener(() => setState(() {})); // rebuild khi data thay đổi
+    _controller.addListener(_safeSetState);
+  }
+
+  void _safeSetState() {
+    if (mounted) setState(() {});
   }
 
   @override
   void dispose() {
+    _controller.removeListener(_safeSetState);
     _controller.dispose();
     super.dispose();
+  }
+
+  // Hàm đổi chế độ biểu đồ
+  void _onPeriodChanged(String period) {
+    setState(() {
+      _chartPeriod = period;
+    });
   }
 
   // ── Helper methods ─────────────────────────────────────────────────────────
@@ -86,36 +98,94 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 
-  // ── Weekly Sales Chart ─────────────────────────────────────────────────────
-  Widget _buildWeeklySalesChart() {
+  // ── Sales Chart with Period Filter (Ngày - Tháng - Năm) ─────────────────────
+  Widget _buildSalesChart() {
+    // Lấy dữ liệu tương ứng theo chế độ
+    List<double> salesData;
+    List<String> labels;
+    String chartTitle;
+
+    switch (_chartPeriod) {
+      case 'month':
+        salesData = _controller.monthlySalesData;
+        labels = _controller.monthLabels;
+        chartTitle = 'Doanh thu theo tháng';
+        break;
+      case 'year':
+        salesData = _controller.yearlySalesData;
+        labels = _controller.yearLabels;
+        chartTitle = 'Doanh thu theo năm';
+        break;
+      case 'week':
+      default:
+        salesData = _controller.weeklySalesData;
+        labels = _controller.weekDayLabels;
+        chartTitle = 'Doanh thu theo tuần';
+    }
+
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.shade200, width: 1.5), // viền như bạn hỏi
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Doanh thu theo tuần',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          // Header + SegmentedButton
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                chartTitle,
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+              ),
+              SegmentedButton<String>(
+                segments: const [
+                  ButtonSegment(value: 'week', label: Text('Tuần')),
+                  ButtonSegment(value: 'month', label: Text('Tháng')),
+                  ButtonSegment(value: 'year', label: Text('Năm')),
+                ],
+                selected: {_chartPeriod},
+                onSelectionChanged: (Set<String> selection) {
+                  _onPeriodChanged(selection.first);
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.selected)) {
+                      return const Color(0xFF1E88E5);
+                    }
+                    return Colors.grey.shade100;
+                  }),
+                  foregroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.selected)) {
+                      return Colors.white;
+                    }
+                    return Colors.black87;
+                  }),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 20),
+
+          const SizedBox(height: 24),
+
+          // Biểu đồ
           SizedBox(
             height: 320,
             child: BarChart(
               BarChartData(
                 alignment: BarChartAlignment.spaceAround,
-                barGroups: List.generate(7, (i) {
-                  final values = _controller.weeklySalesData;
+                maxY: salesData.isNotEmpty ? salesData.reduce((a, b) => a > b ? a : b) * 1.1 : 100,
+                barGroups: List.generate(salesData.length, (i) {
                   return BarChartGroupData(
                     x: i,
                     barRods: [
                       BarChartRodData(
-                        toY: values[i],
+                        toY: salesData[i],
                         color: const Color(0xFF1E88E5),
-                        width: 28,
+                        width: _chartPeriod == 'week' ? 28 : 22, // thu hẹp khi nhiều cột
                         borderRadius: BorderRadius.circular(6),
                       )
                     ],
@@ -125,16 +195,35 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   bottomTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
-                      getTitlesWidget: (value, meta) => Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Text(
-                          _controller.weekDayLabels[value.toInt()],
-                          style: const TextStyle(fontSize: 12),
-                        ),
+                      reservedSize: 40,
+                      getTitlesWidget: (value, meta) {
+                        final index = value.toInt();
+                        if (index < 0 || index >= labels.length) return const SizedBox();
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            labels[index],
+                            style: const TextStyle(fontSize: 11),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 50,
+                      getTitlesWidget: (value, meta) => Text(
+                        _formatCurrency(value),
+                        style: const TextStyle(fontSize: 10),
                       ),
                     ),
                   ),
+                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
                 ),
+                gridData: const FlGridData(show: true, horizontalInterval: null),
+                borderData: FlBorderData(show: false),
               ),
             ),
           ),
@@ -350,7 +439,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           children: [
                             Expanded(
                               flex: 2,
-                              child: _buildWeeklySalesChart(),
+                              child: _buildSalesChart(),
                             ),
                             const SizedBox(width: 24),
                             Expanded(

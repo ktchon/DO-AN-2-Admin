@@ -31,10 +31,10 @@ class _CustomerDetailScreenState extends State<CustomerDetailScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 239, 238, 238),
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: const Text("Chi tiết khách hàng"),
+        backgroundColor: Color(0xFF34C759),
+        title: const Text("Chi tiết khách hàng", style: const TextStyle(color: Colors.white),),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: Colors.white,),
           onPressed: () => Navigator.pop(context),
         ),
       ),
