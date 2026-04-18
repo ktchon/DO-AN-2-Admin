@@ -211,7 +211,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                                       context,
                                                       MaterialPageRoute(
                                                           builder: (_) =>
-                                                              OrderDetailScreen(order: order)),
+                                                              OrderDetailScreen(order: order, orderId: null,)),
                                                     ),
                                                   ),
                                                   // Nút xoá

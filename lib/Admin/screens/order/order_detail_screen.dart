@@ -4,7 +4,7 @@ import 'package:kc_admin_panel/Admin/models/order/order_model.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   final OrderModel order;
-  const OrderDetailScreen({super.key, required this.order});
+  const OrderDetailScreen({super.key, required this.order, required orderId});
 
   @override
   State<OrderDetailScreen> createState() => _OrderDetailScreenState();
@@ -151,6 +151,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                     ),
                                     child: DropdownButtonHideUnderline(
                                       child: DropdownButton<String>(
+                                        dropdownColor: Colors.white,
                                         value: currentStatus,
                                         icon: Icon(Icons.keyboard_arrow_down,
                                             color: _statusColor(currentStatus), size: 18),

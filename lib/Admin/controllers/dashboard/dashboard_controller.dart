@@ -13,10 +13,9 @@ class DashboardController with ChangeNotifier {
 
   List<OrderModel> _allOrders = [];
   List<OrderModel> _recentOrders = [];
-  List<OrderModel> _weeklyOrders = []; // dùng cho tuần
-  List<OrderModel> _monthlyOrders = []; // dùng cho tháng
-  List<OrderModel> _yearlyOrders = []; // dùng cho năm
-
+  List<OrderModel> _weeklyOrders = [];
+  List<OrderModel> _monthlyOrders = [];
+  List<OrderModel> _yearlyOrders = [];
   List<UserModel> _users = [];
 
   StreamSubscription<List<OrderModel>>? _allOrdersSub;
@@ -26,72 +25,130 @@ class DashboardController with ChangeNotifier {
   StreamSubscription<List<OrderModel>>? _yearlyOrdersSub;
   StreamSubscription<List<UserModel>>? _usersSub;
 
-  // ─── Init ──────────────────────────────────────────────────────────────────
+  int _pendingStreams = 0;
+
+  // ─── Constructor ───────────────────────────────────────────────────────────
   DashboardController() {
-    _subscribeAll();
+    _subscribeToAllStreams();
   }
 
-  void _subscribeAll() {
+  void _subscribeToAllStreams() {
     isLoading = true;
     error = null;
+    _pendingStreams = 6; // allOrders, recent, weekly, monthly, yearly, users
 
-    // All orders
+    notifyListeners();
+
+    // All Orders (quan trọng nhất)
     _allOrdersSub = _repo.watchAllOrders().listen(
       (orders) {
         _allOrders = orders;
-        isLoading = false;
-        notifyListeners();
+        _onStreamDataReceived();
       },
-      onError: (e) {
-        error = e.toString();
-        isLoading = false;
-        notifyListeners();
-      },
+      onError: (e) => _onStreamError(e),
     );
 
-    // Recent 10 orders
+    // Recent Orders
     _recentOrdersSub = _repo.watchRecentOrders(limit: 10).listen(
       (orders) {
         _recentOrders = orders;
-        notifyListeners();
+        _onStreamDataReceived();
       },
+      onError: (e) => _onStreamError(e),
     );
 
-    // Weekly orders (7 ngày)
+    // Weekly Orders
     _weeklyOrdersSub = _repo.watchWeeklyOrders().listen(
       (orders) {
         _weeklyOrders = orders;
-        notifyListeners();
+        _onStreamDataReceived();
       },
+      onError: (e) => _onStreamError(e),
     );
 
-    // Monthly orders (6 tháng gần nhất) - bạn cần thêm vào Repository
+    // Monthly Orders
     _monthlyOrdersSub = _repo.watchMonthlyOrders().listen(
       (orders) {
         _monthlyOrders = orders;
-        notifyListeners();
+        _onStreamDataReceived();
       },
+      onError: (e) => _onStreamError(e),
     );
 
-    // Yearly orders (12 tháng gần nhất)
+    // Yearly Orders
     _yearlyOrdersSub = _repo.watchYearlyOrders().listen(
       (orders) {
         _yearlyOrders = orders;
-        notifyListeners();
+        _onStreamDataReceived();
       },
+      onError: (e) => _onStreamError(e),
     );
 
     // Users
     _usersSub = _repo.watchAllUsers().listen(
       (users) {
         _users = users;
-        notifyListeners();
+        _onStreamDataReceived();
       },
+      onError: (e) => _onStreamError(e),
     );
   }
 
-  // ─── Computed Metrics ──────────────────────────────────────────────────────
+  void _onStreamDataReceived() {
+    _pendingStreams = (_pendingStreams - 1).clamp(0, 999);
+    if (_pendingStreams <= 0) {
+      isLoading = false;
+    }
+    notifyListeners();
+  }
 
+  void _onStreamError(dynamic e) {
+    error = e.toString();
+    _pendingStreams = (_pendingStreams - 1).clamp(0, 999);
+    if (_pendingStreams <= 0) {
+      isLoading = false;
+    }
+    notifyListeners();
+  }
+
+  // Hàm refresh thủ công (gọi khi cần tải lại dữ liệu)
+  void refresh() {
+    // Hủy tất cả subscription cũ
+    _disposeSubscriptions();
+
+    // Xóa dữ liệu cũ
+    _allOrders.clear();
+    _recentOrders.clear();
+    _weeklyOrders.clear();
+    _monthlyOrders.clear();
+    _yearlyOrders.clear();
+    _users.clear();
+
+    isLoading = true;
+    error = null;
+    notifyListeners();
+
+    // Subscribe lại
+    _subscribeToAllStreams();
+  }
+
+  void _disposeSubscriptions() {
+    _allOrdersSub?.cancel();
+    _recentOrdersSub?.cancel();
+    _weeklyOrdersSub?.cancel();
+    _monthlyOrdersSub?.cancel();
+    _yearlyOrdersSub?.cancel();
+    _usersSub?.cancel();
+
+    _allOrdersSub = null;
+    _recentOrdersSub = null;
+    _weeklyOrdersSub = null;
+    _monthlyOrdersSub = null;
+    _yearlyOrdersSub = null;
+    _usersSub = null;
+  }
+
+  // ─── Computed Getters ──────────────────────────────────────────────────────
   double get salesTotal => _allOrders.fold(0.0, (sum, o) => sum + (o.totalAmount ?? 0));
 
   double get avgOrderValue => _allOrders.isEmpty ? 0 : salesTotal / _allOrders.length;
@@ -99,7 +156,9 @@ class DashboardController with ChangeNotifier {
   int get totalOrders => _allOrders.length;
   int get totalUsers => _users.length;
 
-  // ─── Weekly Sales Data (7 ngày) ────────────────────────────────────────────
+  List<OrderModel> get recentOrdersList => _recentOrders;
+
+  // Weekly Sales Data
   List<double> get weeklySalesData {
     final now = DateTime.now();
     final result = List<double>.filled(7, 0.0);
@@ -123,7 +182,7 @@ class DashboardController with ChangeNotifier {
     });
   }
 
-  // ─── Monthly Sales Data (6 tháng gần nhất) ────────────────────────────────
+  // Monthly Sales Data (6 tháng)
   List<double> get monthlySalesData {
     final now = DateTime.now();
     final result = List<double>.filled(6, 0.0);
@@ -147,7 +206,7 @@ class DashboardController with ChangeNotifier {
     });
   }
 
-  // ─── Yearly Sales Data (4 năm gần nhất) ───────────────────────────────────
+  // Yearly Sales Data (4 năm)
   List<double> get yearlySalesData {
     final now = DateTime.now();
     final result = List<double>.filled(4, 0.0);
@@ -167,7 +226,7 @@ class DashboardController with ChangeNotifier {
     return List.generate(4, (i) => '${now.year - (3 - i)}');
   }
 
-  // ─── Order Status List ─────────────────────────────────────────────────────
+  // Order Status
   List<Map<String, dynamic>> get orderStatusList => [
         {
           'status': 'pending',
@@ -224,17 +283,10 @@ class DashboardController with ChangeNotifier {
     return map;
   }
 
-  List<OrderModel> get recentOrdersList => _recentOrders;
-
   // ─── Dispose ───────────────────────────────────────────────────────────────
   @override
   void dispose() {
-    _allOrdersSub?.cancel();
-    _recentOrdersSub?.cancel();
-    _weeklyOrdersSub?.cancel();
-    _monthlyOrdersSub?.cancel();
-    _yearlyOrdersSub?.cancel();
-    _usersSub?.cancel();
+    _disposeSubscriptions();
     super.dispose();
   }
 }

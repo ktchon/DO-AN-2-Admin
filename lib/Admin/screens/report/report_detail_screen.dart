@@ -6,7 +6,7 @@ import 'package:kc_admin_panel/Admin/models/report/review_model.dart';
 
 class ReportDetailScreen extends StatefulWidget {
   final ReportModel report;
-  const ReportDetailScreen({super.key, required this.report});
+  const ReportDetailScreen({super.key, required this.report, required reviewId});
 
   @override
   State<ReportDetailScreen> createState() => _ReportDetailScreenState();

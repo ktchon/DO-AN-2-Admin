@@ -7,6 +7,7 @@ import 'package:kc_admin_panel/Admin/screens/dashboard/admin_dashboard_screen.da
     show AdminDashboardScreen;
 import 'package:kc_admin_panel/Admin/screens/login/login_screen.dart';
 import 'package:kc_admin_panel/Admin/screens/media/media_screen.dart';
+import 'package:kc_admin_panel/Admin/screens/notification/notifications_screen.dart';
 import 'package:kc_admin_panel/Admin/screens/order/order_screen.dart';
 import 'package:kc_admin_panel/Admin/screens/products/products_screen.dart';
 import 'package:kc_admin_panel/Admin/screens/profile/profile_screen.dart';
@@ -36,9 +37,16 @@ class MyAdminApp extends StatelessWidget {
         AppRoutes.banner: (context) => const BannersScreen(),
         AppRoutes.coupon: (context) => const CouponsScreen(),
         AppRoutes.media: (context) => const MediaScreen(),
+        AppRoutes.notification: (context) => const NotificationsScreen(),
         AppRoutes.profile: (context) => const ProfileScreen(),
         AppRoutes.setting: (context) => const SettingsScreen(),
       },
+      theme: ThemeData(
+        fontFamily: 'Roboto', 
+        textTheme: const TextTheme(
+          bodyMedium: TextStyle(fontFamily: 'Roboto'),
+        ),
+      ),
     );
   }
 }

@@ -144,9 +144,15 @@ class AdminSidebar extends StatelessWidget {
                     isSelected: currentRoute == '/admin/media',
                     onTap: () => Navigator.pushReplacementNamed(context, '/admin/media'),
                   ),
+                  AdminSidebarMenu(
+                    icon: Icons.notifications_none_outlined,
+                    title: 'Thông báo',
+                    isSelected: currentRoute == '/admin/notifications',
+                    onTap: () => Navigator.pushReplacementNamed(context, '/admin/notifications'),
+                  ),
             
                   const Divider(
-                    height: 100,
+                    height: 10,
                     color: Colors.green,
                     thickness: 2,
                   ),

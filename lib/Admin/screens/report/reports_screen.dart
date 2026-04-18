@@ -127,7 +127,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (_) =>
-                                                        ReportDetailScreen(report: report),
+                                                        ReportDetailScreen(report: report, reviewId: null,),
                                                   ),
                                                 ),
                                                 tooltip: "Xem chi tiết"

@@ -11,6 +11,7 @@ class AppRoutes {
   static const String banner = '/admin/banners';
   static const String coupon = '/admin/coupons';
   static const String media = '/admin/media';
+  static const String notification = '/admin/notifications';
   static const String profile = '/admin/profile';
   static const String setting = '/admin/settings';
 }
