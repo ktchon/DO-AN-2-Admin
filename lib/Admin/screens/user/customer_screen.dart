@@ -168,7 +168,7 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                       columns: const [
                                         DataColumn(
                                           label: Text(
-                                            'Customer',
+                                            'Khách hàng',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600, fontSize: 15),
                                           ),
@@ -182,21 +182,21 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                         ),
                                         DataColumn(
                                           label: Text(
-                                            'Phone Number',
+                                            'Số điện thoại',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600, fontSize: 15),
                                           ),
                                         ),
                                         DataColumn(
                                           label: Text(
-                                            'Registered',
+                                            'Ngày sử dụng',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600, fontSize: 15),
                                           ),
                                         ),
                                         DataColumn(
                                           label: Text(
-                                            'Action',
+                                            'Tuỳ chỉnh',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w600, fontSize: 15),
                                           ),

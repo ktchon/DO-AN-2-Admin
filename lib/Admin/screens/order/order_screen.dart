@@ -83,7 +83,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Orders',
+                        const Text('Đơn hàng',
                             style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
                         const SizedBox(height: 20),
 
@@ -156,19 +156,19 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                             label: Text('Order ID',
                                                 style: TextStyle(fontWeight: FontWeight.w600))),
                                         DataColumn(
-                                            label: Text('Date',
+                                            label: Text('Ngày',
                                                 style: TextStyle(fontWeight: FontWeight.w600))),
                                         DataColumn(
-                                            label: Text('Items',
+                                            label: Text('Số lượng',
                                                 style: TextStyle(fontWeight: FontWeight.w600))),
                                         DataColumn(
-                                            label: Text('Status',
+                                            label: Text('Trạng thái',
                                                 style: TextStyle(fontWeight: FontWeight.w600))),
                                         DataColumn(
-                                            label: Text('Amount',
+                                            label: Text('Số tiền',
                                                 style: TextStyle(fontWeight: FontWeight.w600))),
                                         DataColumn(
-                                            label: Text('Action',
+                                            label: Text('Tuỳ chỉnh',
                                                 style: TextStyle(fontWeight: FontWeight.w600))),
                                       ],
                                       rows: orders.map((order) {
@@ -179,7 +179,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                             DataCell(Text(order.orderDate != null
                                                 ? "${order.orderDate!.toDate().day}/${order.orderDate!.toDate().month}/${order.orderDate!.toDate().year}"
                                                 : "—")),
-                                            DataCell(Text("${order.items.length} Items")),
+                                            DataCell(Text("${order.items.length}")),
                                             DataCell(
                                               Container(
                                                 padding: const EdgeInsets.symmetric(

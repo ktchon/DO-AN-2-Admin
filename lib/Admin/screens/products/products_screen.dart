@@ -143,25 +143,25 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
                                           columns: const [
                                             DataColumn(
-                                                label: Text("Product",
+                                                label: Text("Sản phẩm",
                                                     style: TextStyle(fontWeight: FontWeight.bold))),
                                             DataColumn(
-                                                label: Text("Stock",
+                                                label: Text("Số lượng",
                                                     style: TextStyle(fontWeight: FontWeight.bold))),
                                             DataColumn(
-                                                label: Text("Sold",
+                                                label: Text("Đã bán",
                                                     style: TextStyle(fontWeight: FontWeight.bold))),
                                             DataColumn(
-                                                label: Text("Brand",
+                                                label: Text("Thương hiệu",
                                                     style: TextStyle(fontWeight: FontWeight.bold))),
                                             DataColumn(
-                                                label: Text("Price",
+                                                label: Text("Giá",
                                                     style: TextStyle(fontWeight: FontWeight.bold))),
                                             DataColumn(
-                                                label: Text("Date",
+                                                label: Text("Ngày",
                                                     style: TextStyle(fontWeight: FontWeight.bold))),
                                             DataColumn(
-                                                label: Text("Action",
+                                                label: Text("Tuỳ chỉnh",
                                                     style: TextStyle(fontWeight: FontWeight.bold))),
                                           ],
 

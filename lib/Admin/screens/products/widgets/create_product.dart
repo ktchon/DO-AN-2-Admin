@@ -91,7 +91,7 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
                       IconButton(
                           onPressed: () => Navigator.pop(context),
                           icon: const Icon(Icons.arrow_back)),
-                      const Text("Create Product",
+                      const Text("Tạo hoặc chỉnh sửa sản phẩm",
                           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     ],
                   ),

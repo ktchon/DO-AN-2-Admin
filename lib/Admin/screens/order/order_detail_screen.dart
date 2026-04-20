@@ -23,6 +23,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     {'value': 'shipped', 'label': 'Shipped'},
     {'value': 'delivered', 'label': 'Delivered'},
     {'value': 'cancelled', 'label': 'Cancelled'},
+    {'value': 'confirmed', 'label': 'Confirmed'},
   ];
 
   @override
@@ -68,10 +69,12 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
     switch (status.toLowerCase()) {
       case 'delivered':
         return Colors.green;
+      case 'confirmed':
+        return Colors.green;
       case 'cancelled':
         return Colors.red;
       case 'shipped':
-        return const Color(0xFF7C3AED); // purple
+        return const Color(0xFF7C3AED); 
       case 'processing':
         return Colors.orange;
       default:

@@ -66,7 +66,7 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
 
                     // Tiêu đề
                     const Text(
-                      'Chào mừng trở lại.',
+                      'Đăng nhập quản trị viên',
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -76,11 +76,6 @@ class _AdminLoginScreenState extends State<AdminLoginScreen> {
 
                     const SizedBox(height: 8),
 
-                    const Text(
-                      'Khám phá những lựa chọn vô hạn và sự tiện lợi chưa từng có.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15, color: Colors.grey),
-                    ),
 
                     const SizedBox(height: 40),
 
